@@ -128,6 +128,25 @@ public class WebRequest {
 		String res = response.body();
 		System.out.println("Added = "+ res);
 	}
+	
+	
+	public static void deleteSensor(int id) {
+		// if not logged in, return
+		if(adminToken.length() == 0) return;
+		
+       
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 // TESTING
 //	public static void main(String[] args) {

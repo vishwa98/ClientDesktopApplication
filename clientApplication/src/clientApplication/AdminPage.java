@@ -192,7 +192,7 @@ public class AdminPage extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 			}
 		});
-		scrollPane.setBounds(10, 89, 945, 187);
+		scrollPane.setBounds(20, 90, 945, 187);
 		contentPane.add(scrollPane);
 		
 		
@@ -408,7 +408,7 @@ public class AdminPage extends JFrame {
 			}
 		});
 		btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btnNewButton_2.setBounds(98, 654, 141, 42);
+		btnNewButton_2.setBounds(46, 654, 141, 42);
 		contentPane.add(btnNewButton_2);
 		
 		
@@ -432,21 +432,33 @@ public class AdminPage extends JFrame {
 		lbl_roomno.setBounds(191, 616, 307, 46);
 		contentPane.add(lbl_roomno);
 		
-		lblNewLabel_6 = new JLabel("");
+		
+		
+		JButton btnNewButton_3 = new JButton("Delete");
+		Image imgdel = new ImageIcon(this.getClass().getResource("/del.png")).getImage();		//setting the button image
+		btnNewButton_3.setIcon(new ImageIcon(imgdel));
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				JOptionPane.showMessageDialog(null,"Deleted Successfully");
+				
+			}
+		});
+		btnNewButton_3.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnNewButton_3.setBounds(211, 654, 150, 42);
+		contentPane.add(btnNewButton_3);
+		
+		JLabel lblNewLabel_7 = new JLabel("");
 		Image img = new ImageIcon(this.getClass().getResource("/addimg.jpg")).getImage();		//setting the background image
-		lblNewLabel_6.setIcon(new ImageIcon(img));
-		lblNewLabel_6.setBounds(0, 0, 1002, 758);
-		contentPane.add(lblNewLabel_6);
+		lblNewLabel_7.setIcon(new ImageIcon(img));
+		lblNewLabel_7.setBounds(0, 0, 1003, 757);
+		contentPane.add(lblNewLabel_7);
 		
 		sensorJTable();
 		
-		refreshTable();
-		
-		
+		refreshTable();		
 		
 	}
-	
-
 }
 
 
