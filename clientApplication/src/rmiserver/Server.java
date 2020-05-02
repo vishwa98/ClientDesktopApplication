@@ -117,6 +117,12 @@ public class Server extends UnicastRemoteObject implements IServer{
 		WebRequest.logout();
 	}
 
+	// delete the sensor by id
+	@Override
+	public void deleteSensor(int id) throws RemoteException {
+		WebRequest.deleteSensorById(id);
+	}
+	
 	// method to send an email
 	private void SendEmail(String msg) {
 		System.out.println("[CRITICAL] Email: "+msg);		

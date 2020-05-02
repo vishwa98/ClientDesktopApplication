@@ -77,7 +77,11 @@ public class WebRequest {
 	// update current sensor information
 	public static void updateSensorInfo(int id, SensorInfo updatedSensor) {
 		// if not logged in, return
-		if(adminToken.length() == 0) return;
+		if(adminToken.length() == 0) { 
+			System.out.println("Not logged in...");
+			return;
+		}
+
 		
 		Gson gson = new Gson();
         String requestBody = gson.toJson(updatedSensor);
@@ -105,7 +109,11 @@ public class WebRequest {
 	// add new sensor
 	public static void addSensor(SensorInfo newSensor) {
 		// if not logged in, return
-		if(adminToken.length() == 0) return;
+		if(adminToken.length() == 0) { 
+			System.out.println("Not logged in...");
+			return;
+		}
+
 		
 		Gson gson = new Gson();
         String requestBody = gson.toJson(newSensor);
@@ -128,19 +136,40 @@ public class WebRequest {
 		String res = response.body();
 		System.out.println("Added = "+ res);
 	}
-	
-	
-	public static void deleteSensor(int id) {
+		
+	// delete the sensor by ID
+	public static void deleteSensorById(int id) {
 		// if not logged in, return
-		if(adminToken.length() == 0) return;
+		if(adminToken.length() == 0) { 
+			System.out.println("Not logged in...");
+			return;
+		}
 		
-       
-		
-		
+		String url = BASE_URL + "/api/sensorinfo/"+id;
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .DELETE()
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .header("Authorization", "Bearer "+adminToken)
+                .build();
+
+        HttpResponse<String> response = null;
+		try {
+			response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
+		if(response == null) {
+			System.out.println("Error when sending the delete request...");
+			return;
+		}
+		String res = response.body();
+		if(res != null)System.out.println("Deleted the sensor "+ res);
+		else System.out.println("Error in deleting the sensor...");
 	}
-	
-	
-	
+		
 	
 	
 	
@@ -166,5 +195,5 @@ public class WebRequest {
 		List<SensorInfo> obj = gson.fromJson(json, collectionType);
 		return obj;
 	}
-	
+
 }

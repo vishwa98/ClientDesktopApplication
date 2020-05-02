@@ -390,11 +390,7 @@ public class AdminPage extends JFrame {
 			            int room_no = Integer.parseInt(edRoomNo.getText().trim());
 			            int floor_no = Integer.parseInt(edFloorNo.getText().trim());
 			            SensorInfo updatedSensorInfo = new SensorInfo(id, 0, 0, room_no, floor_no, true, "", "");
-			            service.updateSensor(id, updatedSensorInfo);
-			           
-			            
-			            
-			            
+			            service.updateSensor(id, updatedSensorInfo);			            
 		            	JOptionPane.showMessageDialog(null,"Saved Successfully");			            
 			        } catch (NotBoundException ex) {
 			            System.err.println(ex.getMessage());
@@ -439,9 +435,21 @@ public class AdminPage extends JFrame {
 		btnNewButton_3.setIcon(new ImageIcon(imgdel));
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				JOptionPane.showMessageDialog(null,"Deleted Successfully");
-				
+				int id = Integer.parseInt(edID.getText().trim());
+				if(id > 0) {
+					try {
+						service.deleteSensor(id);
+						JOptionPane.showMessageDialog(null,"Deleted Successfully");
+						// to update the table immediately
+						DefaultTableModel model = (DefaultTableModel)table.getModel();
+				        model.setRowCount(0);
+				        sensorJTable();
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null,"Error when deleting the sensor...");
+					}
+				}
 			}
 		});
 		btnNewButton_3.setFont(new Font("Tahoma", Font.BOLD, 15));
