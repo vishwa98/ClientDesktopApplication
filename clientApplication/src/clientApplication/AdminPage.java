@@ -22,6 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
@@ -73,6 +74,11 @@ public class AdminPage extends JFrame {
 			}
 		});
 	}
+	
+	
+	private HashMap<Integer, Boolean> hasAlertedCO2 = new HashMap<Integer, Boolean>();
+	private HashMap<Integer, Boolean> hasAlertedSmoke = new HashMap<Integer, Boolean>();
+	
 	
 	
 	private IServer service = null;
@@ -218,7 +224,7 @@ public class AdminPage extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"Sensor ID", "Sensor status", "Floor No", "Room No", "Smoke level", "CO2 level"
+				"Sensor ID", "Sensor Active", "Floor No", "Room No", "Smoke level", "CO2 level"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
@@ -262,7 +268,7 @@ public class AdminPage extends JFrame {
 			public void keyPressed(KeyEvent e) {
 				
 				edID.setEditable(false);
-				lbl_sensorID.setText("Please select a row in the table to edit");
+				lbl_sensorID.setText("Please select a row in the table to edit floor no and room no");
 				
 			}
 		});
@@ -281,7 +287,7 @@ public class AdminPage extends JFrame {
 			public void keyPressed(KeyEvent e) {	
 				
 				edStat.setEditable(false);
-				lbl_sensorstatus.setText("Please select a row in the table to edit");
+				lbl_sensorstatus.setText("Please select a row in the table to edit floor no and room no");
 				
 			}
 		});
@@ -353,7 +359,7 @@ public class AdminPage extends JFrame {
 		lblNewLabel_5.setBounds(403, 21, 207, 42);
 		contentPane.add(lblNewLabel_5);
 		
-		btnNewButton_2 = new JButton("Save");
+		btnNewButton_2 = new JButton("Save");													//Save
 		Image imgsave = new ImageIcon(this.getClass().getResource("/save.png")).getImage();		//setting the button image
 		btnNewButton_2.setIcon(new ImageIcon(imgsave));
 		btnNewButton_2.addActionListener(new ActionListener() {
@@ -410,12 +416,12 @@ public class AdminPage extends JFrame {
 		
 		lbl_sensorID = new JLabel("");
 		lbl_sensorID.setForeground(Color.RED);
-		lbl_sensorID.setBounds(191, 404, 296, 48);
+		lbl_sensorID.setBounds(191, 404, 442, 48);
 		contentPane.add(lbl_sensorID);
 		
 		lbl_sensorstatus = new JLabel("");
 		lbl_sensorstatus.setForeground(Color.RED);
-		lbl_sensorstatus.setBounds(191, 486, 276, 32);
+		lbl_sensorstatus.setBounds(191, 486, 459, 32);
 		contentPane.add(lbl_sensorstatus);
 		
 		lbl_floorno = new JLabel("");
@@ -430,25 +436,51 @@ public class AdminPage extends JFrame {
 		
 		
 		
-		JButton btnNewButton_3 = new JButton("Delete");
+		JButton btnNewButton_3 = new JButton("Delete");											//Delete
 		Image imgdel = new ImageIcon(this.getClass().getResource("/del.png")).getImage();		//setting the button image
 		btnNewButton_3.setIcon(new ImageIcon(imgdel));
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int id = Integer.parseInt(edID.getText().trim());
-				if(id > 0) {
-					try {
-						service.deleteSensor(id);
-						JOptionPane.showMessageDialog(null,"Deleted Successfully");
-						// to update the table immediately
-						DefaultTableModel model = (DefaultTableModel)table.getModel();
-				        model.setRowCount(0);
-				        sensorJTable();
-					} catch (RemoteException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-						JOptionPane.showMessageDialog(null,"Error when deleting the sensor...");
-					}
+				
+				if(edID.getText().trim().isEmpty() && edStat.getText().trim().isEmpty() && edFloorNo.getText().trim().isEmpty() && edRoomNo.getText().trim().isEmpty()) {	//checks whether all the fields are empty
+					
+					lbl_sensorID.setText("Sensor ID field canno't be kept empty");
+					lbl_sensorstatus.setText("Sensor status field canno't be kept empty");
+					lbl_floorno.setText("Floor Number field canno't be kept empty");
+					lbl_roomno.setText("Room Number field canno't be kept empty");
+					
+				}
+				else if(edID.getText().trim().isEmpty()){								//checks whether the Sensor ID field is empty
+					lbl_sensorID.setText("Sensor ID field canno't be kept empty");
+				}
+				else if(edStat.getText().trim().isEmpty()) {								//checks whether the sensor status field is empty
+					lbl_sensorstatus.setText("Sensor status field canno't be kept empty");
+				}
+				else if(edFloorNo.getText().trim().isEmpty()) {								//checks whether the floor number field is empty
+					lbl_floorno.setText("Floor Number field canno't be kept empty");
+				}
+				else if(edRoomNo.getText().trim().isEmpty()) {
+					lbl_roomno.setText("Room Number field canno't be kept empty");			//checks whether the room number field is empty
+				}
+					
+				else
+				{				
+					int id = Integer.parseInt(edID.getText().trim());
+					if(id > 0) {
+						try {
+							service.deleteSensor(id);
+							JOptionPane.showMessageDialog(null,"Deleted Successfully");
+							// to update the table immediately
+							DefaultTableModel model = (DefaultTableModel)table.getModel();
+							model.setRowCount(0);
+							sensorJTable();
+								} catch (RemoteException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+									JOptionPane.showMessageDialog(null,"Error when deleting the sensor...");
+									}
+							}
+				
 				}
 			}
 		});

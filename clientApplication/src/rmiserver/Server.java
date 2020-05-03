@@ -75,7 +75,7 @@ public class Server extends UnicastRemoteObject implements IServer{
 					String alertmsg = "CO2 level has moved to a value greater than 5 in room " + s.room_no + " of floor " + s.floor_no;
 					SendEmail(msg);
 					SendSMS(msg);
-					JOptionPane.showMessageDialog(null,alertmsg);
+					
 					// update the flag
 					hasAlertedCO2.put(s.id, true);
 					
@@ -90,7 +90,7 @@ public class Server extends UnicastRemoteObject implements IServer{
 					String alertmsg = "Smoke level has moved to a value greater than 5 in room " + s.room_no + " of floor " + s.floor_no;
 					SendEmail(msg);
 					SendSMS(msg);
-					JOptionPane.showMessageDialog(null,alertmsg);
+					
 					// update the flag
 					hasAlertedSmoke.put(s.id, true);
 				}else if(s.smoke_level <= 5) {

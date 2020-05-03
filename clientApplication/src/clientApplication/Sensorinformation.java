@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -16,6 +17,7 @@ import javax.swing.table.TableCellRenderer;
 
 import common.IServer;
 import common.SensorInfo;
+import rmiserver.WebRequest;
 
 import javax.swing.JScrollPane;
 import javax.swing.ImageIcon;
@@ -36,6 +38,14 @@ public class Sensorinformation {
 	private JTable table;
 	
 	private IServer service = null;
+	
+	
+	private HashMap<Integer, Boolean> hasAlertedCO2 = new HashMap<Integer, Boolean>();
+	private HashMap<Integer, Boolean> hasAlertedSmoke = new HashMap<Integer, Boolean>();
+	
+	
+	
+	
 
 	/**
 	 * Launch the application.
@@ -108,8 +118,48 @@ public class Sensorinformation {
 			
 			model.addRow(sensorData);
 			
+			
+			for(SensorInfo s : sensors) {					//alert when the CO2 or smoke level passed 5
+				if(!hasAlertedCO2.containsKey(s.id)) {
+					hasAlertedCO2.put(s.id, false);
+				}
+				
+				if(!hasAlertedSmoke.containsKey(s.id)) {
+					hasAlertedSmoke.put(s.id, false);
+				}
+				
+				if (s.is_active) {
+					// check for CO2 Level
+					if (s.co2_level > 5 && !hasAlertedCO2.get(s.id)) {
+						String alertmsg = "CO2 level has moved to a value greater than 5 in room " + s.room_no + " of floor " + s.floor_no;
+						JOptionPane.showMessageDialog(null,alertmsg,"Alert for Sensor ID " + s.id, JOptionPane.INFORMATION_MESSAGE);
+						
+						// update the flag
+						hasAlertedCO2.put(s.id, true);
+						
+					}else if(s.co2_level <= 5) {
+						// reset the flag
+						hasAlertedCO2.put(s.id, false);
+					} 
+					
+					// Check for Smoke Level
+					if (s.smoke_level > 5 && !hasAlertedSmoke.get(s.id)) {
+						String alertmsg = "Smoke level has moved to a value greater than 5 in room " + s.room_no + " of floor " + s.floor_no;
+						JOptionPane.showMessageDialog(null,alertmsg,"Alert for Sensor ID " + s.id, JOptionPane.INFORMATION_MESSAGE);
+						
+						// update the flag
+						hasAlertedSmoke.put(s.id, true);
+					}else if(s.smoke_level <= 5) {
+						// reset the flag
+						hasAlertedSmoke.put(s.id, false);
+					}
+				}
+			}
+						
 		}
 	}
+	
+
 	
 	
 	public void refreshTable() {							//Refreshes the table every 15 seconds
@@ -153,7 +203,7 @@ public class Sensorinformation {
 			new Object[][] {
 			},
 			new String[] {
-				"Sensor ID", "Sensor status", "Floor No", "Room No", "Smoke level", "CO2 level"
+				"Sensor ID", "Sensor Active", "Floor No", "Room No", "Smoke level", "CO2 level"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
