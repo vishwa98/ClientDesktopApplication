@@ -7,8 +7,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import java.rmi.registry.Registry;
 import common.IServer;
 import common.SensorInfo;
@@ -72,7 +70,6 @@ public class Server extends UnicastRemoteObject implements IServer{
 				// check for CO2 Level
 				if (s.co2_level > 5 && !hasAlertedCO2.get(s.id)) {
 					String msg = "CO2 level is greater than 5 on room "+ s.room_no + " of floor "+s.floor_no;
-					String alertmsg = "CO2 level has moved to a value greater than 5 in room " + s.room_no + " of floor " + s.floor_no;
 					SendEmail(msg);
 					SendSMS(msg);
 					
@@ -87,7 +84,6 @@ public class Server extends UnicastRemoteObject implements IServer{
 				// Check for Smoke Level
 				if (s.smoke_level > 5 && !hasAlertedSmoke.get(s.id)) {
 					String msg = "Smoke level is greater than 5 on room "+ s.room_no + " of floor "+s.floor_no;
-					String alertmsg = "Smoke level has moved to a value greater than 5 in room " + s.room_no + " of floor " + s.floor_no;
 					SendEmail(msg);
 					SendSMS(msg);
 					

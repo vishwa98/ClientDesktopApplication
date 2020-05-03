@@ -23,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -33,20 +34,13 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 public class Sensorinformation {
-
 	private JFrame frame;
 	private JTable table;
-	
 	private IServer service = null;
 	
+	private static HashMap<Integer, Boolean> hasAlertedCO2 = new HashMap<Integer, Boolean>();
+	private static HashMap<Integer, Boolean> hasAlertedSmoke = new HashMap<Integer, Boolean>();
 	
-	private HashMap<Integer, Boolean> hasAlertedCO2 = new HashMap<Integer, Boolean>();
-	private HashMap<Integer, Boolean> hasAlertedSmoke = new HashMap<Integer, Boolean>();
-	
-	
-	
-	
-
 	/**
 	 * Launch the application.
 	 */
@@ -103,6 +97,8 @@ public class Sensorinformation {
 	
 	public void sensorJTable()			//adding data to the table
 	{
+		if(frame == null) return;
+		
 		DefaultTableModel model = (DefaultTableModel)table.getModel();
 		List<SensorInfo> sensors = Sensorlist();
 		Object sensorData[] = new Object[6];
@@ -246,21 +242,16 @@ public class Sensorinformation {
 	        
 	        
 	        
-	        
-		
-				
-		
 		JButton btnNewButton = new JButton("Admin Login");
 		Image imgg = new ImageIcon(this.getClass().getResource("/logiin.png")).getImage();		//setting the button image
 		btnNewButton.setIcon(new ImageIcon(imgg));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				// frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 				frame.dispose();	//closes the current frame
 				Login log = new Login();
-				log.setVisible(true);	//Login frame is displayed
-				
-				
+				log.setVisible(true);	//Login frame is displayed		
+				frame = null;
 			}
 		});
 		btnNewButton.setBounds(858, 473, 173, 42);
