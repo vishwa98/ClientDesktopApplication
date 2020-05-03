@@ -119,7 +119,10 @@ public class Sensorinformation {
 			model.addRow(sensorData);
 			
 			
-			for(SensorInfo s : sensors) {					//alert when the CO2 or smoke level passed 5
+		}
+			
+			
+			for(SensorInfo s : sensors) {					//alert when the CO2 or smoke level passes 5
 				if(!hasAlertedCO2.containsKey(s.id)) {
 					hasAlertedCO2.put(s.id, false);
 				}
@@ -156,7 +159,7 @@ public class Sensorinformation {
 				}
 			}
 						
-		}
+		
 	}
 	
 
@@ -175,6 +178,8 @@ public class Sensorinformation {
 	    });
 	    
 	    timer.start();
+	   
+	    
 	  }
 	
 	
